@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora by: Dewar</title>
+</head>
+<body>
+
+<h2>Ingresar Datos</h2>
+
+<div>
+  <label for="kilometraje">Kilometraje:</label>
+  <input type="number" id="kilometraje">
+</div>
+
+<div>
+  <label for="nDatos">Número de Datos:</label>
+  <input type="number" id="nDatos">
+</div>
+
+<button onclick="mostrarDatos()">Ejecutar</button>
+
+<h2>Datos de Kilometraje</h2>
+
+<table id="datosTable">
+  <thead>
+    <tr>
+      <th>Decimal</th>
+      <th>Hexadecimal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Aquí se insertarán los datos -->
+  </tbody>
+</table>
+
+<script>
+  function mostrarDatos() {
+    let kilometraje = parseInt(document.getElementById("kilometraje").value);
+    let nDatos = parseInt(document.getElementById("nDatos").value);
+
+    let incremento = Math.floor(kilometraje / nDatos);
+    let resto = kilometraje % nDatos;
+
+    let tableBody = document.getElementById("datosTable").getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Limpiar tabla antes de agregar nuevos datos
+
+    for (let i = 0; i < nDatos; i++) {
+      let valor = (i < resto) ? incremento + 1 : incremento;
+      let row = tableBody.insertRow(i);
+      let decimalCell = row.insertCell(0);
+      let hexadecimalCell = row.insertCell(1);
+      decimalCell.textContent = valor;
+      let hexString = valor.toString(16).toUpperCase(); // Convertir a hexadecimal y mayúsculas
+      if (hexString.length < 4) {
+        hexString = "0".repeat(4 - hexString.length) + hexString; // Agregar ceros a la izquierda si el valor es menor que 4 cifras
+      }
+      hexadecimalCell.textContent = hexString;
+    }
+  }
+
+  // Agregar event listener para detectar la tecla "Enter"
+  document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      mostrarDatos();
+    }
+  });
+</script>
+
+</body>
+</html>

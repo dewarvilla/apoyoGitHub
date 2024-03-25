@@ -1,0 +1,16 @@
+<input type="text" id="userInput">
+<button onclick="changeData()">Cambiar Datos</button>
+
+<script>
+function changeData() {
+    let userInput = document.getElementById("userInput").value;
+    let newData = prompt("Ingresa el nuevo valor:");
+    
+    if (newData !== null) {
+        document.getElementById("userInput").value = newData;
+        console.log("Datos cambiados. Nuevo valor: " + newData);
+    } else {
+        console.log("Operación cancelada. Valor actual: " + userInput);
+    }
+}
+</script>

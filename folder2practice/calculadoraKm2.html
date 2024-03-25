@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora by: Dewar</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  label {
+    font-weight: bold;
+  }
+  input[type="number"] {
+    width: 100px;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  h2 {
+    margin-top: 30px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 70%;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  th {
+    background-color: #4CAF50;
+    color: white;
+  }
+</style>
+</head>
+<body>
+
+<h2>Ingresar Datos</h2>
+
+<div>
+  <label for="kilometraje">Kilometraje:</label>
+  <input type="number" id="kilometraje">
+</div>
+
+<div>
+  <label for="nDatos">Número de Datos:</label>
+  <input type="number" id="nDatos">
+</div>
+
+<div>
+  <label for="kmDeseado">Kilometraje Deseado:</label>
+  <input type="number" id="kmDeseado">
+</div>
+
+<button onclick="mostrarDatos()">Ejecutar</button>
+
+<h2>Datos de Kilometraje</h2>
+
+<table id="datosTable">
+  <thead>
+    <tr>
+      <th>Km Base (Hexadecimal)</th>
+      <th>Km Deseado (Hexadecimal)</th>
+      <th>Km Sugerido (Hexadecimal)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Aquí se insertarán los datos -->
+  </tbody>
+</table>
+
+<p id="sumaSugeridos"></p>
+
+<script>
+  function mostrarDatos() {
+    let kilometraje = parseInt(document.getElementById("kilometraje").value); // solicitar un dato al usuario y pasarlo a valor numerico
+    let nDatos = parseInt(document.getElementById("nDatos").value);
+    let kmDeseado = parseInt(document.getElementById("kmDeseado").value);
+
+    let incremento = Math.floor(kilometraje / nDatos);
+    let resto = kilometraje % nDatos;
+    let incrementoDeseado = Math.floor(kmDeseado / nDatos);
+    let restoDeseado = kmDeseado % nDatos;
+
+    let tableBody = document.getElementById("datosTable").getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Limpiar tabla antes de agregar nuevos datos
+
+    let sumaSugeridos = 0; // Variable para almacenar la suma de Km Sugeridos en decimal
+
+    for (let i = 0; i < nDatos; i++) {
+      let valor = (i < resto) ? incremento + 1 : incremento;
+      let valorDeseado = (i < restoDeseado) ? incrementoDeseado + 1 : incrementoDeseado;
+      let lastDigit = valor.toString(16).toUpperCase().slice(-1); // Obtener último dígito de Km Base en hexadecimal
+      let suggestedHex = valorDeseado.toString(16).toUpperCase().slice(0, -1) + lastDigit; // Km Deseado cambiando el último dígito
+      let suggestedDecimal = parseInt(suggestedHex, 16); // Convertir el valor sugerido de hexadecimal a decimal
+      sumaSugeridos += suggestedDecimal; // Agregar el valor sugerido a la suma total
+      let row = tableBody.insertRow(i);
+      let kmBaseCell = row.insertCell(0);
+      let kmDeseadoCell = row.insertCell(1);
+      let kmSugeridoCell = row.insertCell(2);
+      kmBaseCell.textContent = valor.toString(16).toUpperCase(); // Convertir a hexadecimal y mayúsculas
+      kmDeseadoCell.textContent = valorDeseado.toString(16).toUpperCase(); // Convertir a hexadecimal y mayúsculas
+      kmSugeridoCell.textContent = suggestedHex; // Mostrar Km Sugerido en hexadecimal
+    }
+
+    // Mostrar la suma de Km Sugeridos en formato decimal
+    document.getElementById("sumaSugeridos").textContent = "Con los Datos sugeridos el Km quedara en: " + sumaSugeridos;
+  }
+
+  // Agregar event listener para detectar la tecla "Enter"
+  document.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      mostrarDatos();
+    }
+  });
+</script>
+
+</body>
+</html>
+
